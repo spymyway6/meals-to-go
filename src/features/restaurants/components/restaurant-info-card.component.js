@@ -1,48 +1,59 @@
 import React from "react";
-import styled from "styled-components/native";
-import { Text } from "react-native";
-import { Card, Paragraph } from "react-native-paper";
-
-const RestaurantCard = styled(Card)`
-  background-color: ${(props) => props.theme.colors.bg.primary};
-`;
-const RestaurantCardCover = styled(Card.Cover)`
-  padding: ${(props) => props.theme.space[3]};
-  background-color: ${(props) => props.theme.colors.bg.primary};
-`;
-
-const CardTitle = styled(Text)`
-  padding-top: ${(props) => props.theme.space[2]};
-  font-size: ${(props) => props.theme.fontSizes.title};
-  font-weight: ${(props) => props.theme.fontWeights.bold};
-  color: ${(props) => props.theme.colors.ui.primary};
-`;
-
-const CardAddress = styled(Paragraph)`
-  font-family: ${(props) => props.theme.fonts.body};
-  font-size: ${(props) => props.theme.fontSizes.caption};
-  color: ${(props) => props.theme.colors.ui.primary};
-  font-weight: ${(props) => props.theme.fontWeights.medium};
-`;
+import { Card } from "react-native-paper";
+import { SvgXml } from "react-native-svg";
+import star from "../../../../assets/star";
+import open from "../../../../assets/open";
+import { Spacer } from "../../../components/spacer/spacer.component";
+import { Text } from "../../../components/typography/typography.component";
+import {
+  Icon,
+  SectionEnd,
+  Section,
+  Rating,
+  Row,
+} from "../components/restaurant-info-card.styles";
 
 export const RestaurantInfoCard = ({ restaurant = {} }) => {
   const {
     name = "TaskFunnels",
-    icon,
+    icon = "https://maps.gstatic.com/mapfiles/place_api/icons/v1/png_71/lodging-71.png",
     photos = [
-      "https://coloradoskyway.com/wp-content/uploads/2020/12/Chipeta-Exterior-LowRes.jpg",
+      "https://www.foodiesfeed.com/wp-content/uploads/2019/06/top-view-for-box-of-2-burgers-home-made-600x899.jpg",
     ],
     address = "100 Some Random Street",
     isOpenNow = true,
     rating = 4,
-    isClosedTemporarily,
+    isClosedTemporarily = true,
   } = restaurant;
+
+  // Rating
+  const ratingArray = Array.from(new Array(Math.ceil(rating)));
   return (
     <Card>
       <Card.Cover source={{ uri: photos[0] }} />
       <Card.Content>
-        <CardTitle>{name}</CardTitle>
-        <CardAddress>{address}</CardAddress>
+        <Row>
+          <Text variant="label">{name}</Text>
+        </Row>
+        <Section>
+          <Rating>
+            {ratingArray.map(() => (
+              <SvgXml xml={star} width={20} height={20} />
+            ))}
+          </Rating>
+          <SectionEnd>
+            {isClosedTemporarily && (
+              <Text variant="error">CLOSED TEMPORARILY</Text>
+            )}
+            <Spacer position="left" size="large">
+              {isOpenNow && <SvgXml xml={open} width={20} height={20} />}
+            </Spacer>
+            <Spacer position="left" size="large">
+              <Icon source={{ uri: icon }} />
+            </Spacer>
+          </SectionEnd>
+        </Section>
+        <Text variant="caption">{address}</Text>
       </Card.Content>
     </Card>
   );
