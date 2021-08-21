@@ -1,10 +1,9 @@
 import { StatusBar as ExpoStatusBar } from "expo-status-bar";
 import React from "react";
-import { View, Text, SafeAreaView } from "react-native";
+import { Text, SafeAreaView } from "react-native";
 import { ThemeProvider } from "styled-components/native";
 import { RestaurantsScreen } from "./src/features/restaurants/screens/restaurants.screen";
 import { theme } from "./src/infrastructure/theme";
-import { SafeArea } from "./src/components/utility/safearea.component";
 import {
   useFonts as useOswald,
   Oswald_400Regular,
