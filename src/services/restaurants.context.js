@@ -7,10 +7,10 @@ export const RestaurantContextProvider = ({ children }) => {
   const [restaurants, setRestaurants] = useState([]);
   const [isLoading, setIsloading] = useState(false);
   const [error, setError] = useState(null);
-  const retrieveRestaurants = () => {
+  const retrieveRestaurants = (location) => {
     setIsloading(true);
     setTimeout(() => {
-      restaurantRequest()
+      restaurantRequest(location)
         .then(restaurantsTransform)
         .then((results) => {
           setIsloading(false);
@@ -23,12 +23,19 @@ export const RestaurantContextProvider = ({ children }) => {
     }, 2000);
   };
 
-  useEffect(() => {
-    retrieveRestaurants();
-  }, []);
+  // useEffect(() => {
+  //   retrieveRestaurants();
+  // }, []);
 
   return (
-    <RestaurantContext.Provider value={{ restaurants, isLoading, error }}>
+    <RestaurantContext.Provider
+      value={{
+        restaurants,
+        isLoading,
+        error,
+        onSearchResto: retrieveRestaurants,
+      }}
+    >
       {children}
     </RestaurantContext.Provider>
   );

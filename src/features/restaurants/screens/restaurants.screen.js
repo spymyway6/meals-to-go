@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import styled from "styled-components/native";
 import { FlatList } from "react-native";
 import { ActivityIndicator, Colors } from "react-native-paper";
@@ -6,6 +6,7 @@ import { RestaurantInfoCard } from "../../restaurants/components/restaurant-info
 import { Spacer } from "../../../components/spacer/spacer.component";
 import { SafeArea } from "../../../components/utility/safearea.component";
 import { RestaurantContext } from "../../../services/restaurants.context";
+import { LocationContext } from "../../../services/location/location.context";
 import { Search } from "../components/search.component";
 
 const RestaurantList = styled(FlatList).attrs({
@@ -25,7 +26,15 @@ const LoadingContainer = styled.View`
 `;
 
 export const RestaurantsScreen = () => {
-  const { isLoading, error, restaurants } = useContext(RestaurantContext);
+  const { isLoading, error, restaurants, onSearchResto } = useContext(RestaurantContext);
+  const { location } = useContext(LocationContext);
+  console.log(location, 'location resto');
+  const latLng = `${location?.lat},${location?.lng}`;
+  useEffect(() => {
+    onSearchResto(latLng);
+  }, [latLng]);
+
+
   return (
     <SafeArea>
       {isLoading && (
@@ -35,7 +44,7 @@ export const RestaurantsScreen = () => {
       )}
       <Search />
       <RestaurantList
-        data={restaurants}
+        data={isLoading ? [] : restaurants}
         renderItem={({ item }) => {
           return (
             <Spacer position="bottom" size="large">
